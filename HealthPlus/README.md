@@ -101,7 +101,7 @@ npm start
 
 Hosting
 
-(healthplus07.web.app)
+healthplus07.web.app
 ---
 
 ## 📄 License
