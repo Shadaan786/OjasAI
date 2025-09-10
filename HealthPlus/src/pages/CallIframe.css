@@ -1,0 +1,292 @@
+.call-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+}
+
+.call-header {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #4a5568;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.call-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.connecting {
+  background: #f6ad55;
+}
+
+.status-dot.connected {
+  background: #48bb78;
+}
+
+.status-text {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.room-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.room-label {
+  color: #a0aec0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.room-id {
+  color: white;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background: rgba(102, 126, 234, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.call-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.minimize-btn {
+  background: #4a5568;
+  color: white;
+}
+
+.minimize-btn:hover {
+  background: #2d3748;
+}
+
+.end-call-btn {
+  background: #e53e3e;
+  color: white;
+}
+
+.end-call-btn:hover {
+  background: #c53030;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 32, 44, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+  max-width: 400px;
+  padding: 40px;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #4a5568;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+.loading-content h3 {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.loading-content p {
+  color: #a0aec0;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.step {
+  padding: 8px 12px;
+  background: rgba(74, 85, 104, 0.3);
+  border-radius: 6px;
+  font-size: 14px;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.step.active {
+  opacity: 1;
+  background: rgba(102, 126, 234, 0.2);
+  border-left: 3px solid #667eea;
+}
+
+.call-frame-container {
+  flex: 1;
+  position: relative;
+  background: #000;
+}
+
+.call-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #000;
+}
+
+.call-footer {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #4a5568;
+  font-size: 12px;
+}
+
+.footer-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.security-badge {
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.user-info {
+  color: #a0aec0;
+}
+
+.support-info {
+  color: #667eea;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .call-header {
+    padding: 10px 16px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .call-info {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .call-footer {
+    padding: 6px 16px;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+  
+  .footer-info {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .loading-content {
+    padding: 20px;
+  }
+  
+  .loading-content h3 {
+    font-size: 20px;
+  }
+}
+
+/* Full screen optimization */
+@media (max-width: 480px) {
+  .call-header {
+    padding: 8px 12px;
+  }
+  
+  .control-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .room-id {
+    font-size: 10px;
+  }
+}
