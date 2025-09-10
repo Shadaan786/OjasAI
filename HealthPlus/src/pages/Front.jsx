@@ -182,7 +182,7 @@ const Front = () => {
               <div className="cta-arrow">→</div>
             </div>
           </Link>
-
+          <Link to = '/getStarted/Medical'>
           <button className="service-card ai-powered">
             <div className="card-glow ai-glow"></div>
             <div className="service-header">
@@ -213,7 +213,7 @@ const Front = () => {
               <span className="service-cta">Ask AI Now</span>
               <div className="cta-arrow">→</div>
             </div>
-          </button>
+          </button></Link>
 
           <Link to="/OrderMedicine" className="service-card">
             <div className="card-glow"></div>
