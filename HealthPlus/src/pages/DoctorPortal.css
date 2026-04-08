@@ -1,0 +1,64 @@
+.doctor-portal {
+  min-height: 100vh;
+  padding: 2.5rem;
+  background: linear-gradient(145deg, #f8fbff 0%, #edf2ff 100%);
+  color: #1f2a44;
+}
+
+.doctor-portal__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.doctor-portal__header h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+}
+
+.doctor-portal__eyebrow {
+  margin: 0;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.doctor-portal__logout {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.doctor-portal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.doctor-card {
+  background: #ffffff;
+  padding: 1.2rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.doctor-card h2 {
+  margin: 0.4rem 0;
+  font-size: 1.15rem;
+}
+
+.doctor-card__icon {
+  font-size: 1.5rem;
+}
+
+.doctor-portal__footer-card {
+  margin-top: 1.5rem;
+  background: #ffffff;
+  border-left: 4px solid #6366f1;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+}
