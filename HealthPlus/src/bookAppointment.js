@@ -1,4 +1,9 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db, auth } from "./firebase";
 
 const doctorDirectory = {
@@ -16,7 +21,8 @@ export async function bookAppointment(doctorId, time) {
   }
 
   const roomId = `appointment-${Date.now().toString(36)}-${user.uid.slice(0, 6)}`;
-  const doctor = doctorDirectory[doctorId] || { name: "Doctor", specialty: "General" };
+  const doctor =
+    doctorDirectory[doctorId] || { name: "Doctor", specialty: "General" };
 
   const [datePart, timePart] = (time || "").split(" ");
   const [year, month, day] = (datePart || "").split("-").map(Number);
@@ -62,6 +68,8 @@ export async function bookAppointment(doctorId, time) {
       doctorName: doctor.name,
       doctorSpecialty: doctor.specialty,
       time,
+      appointmentDate: appointmentDate.toISOString(),
+      appointmentAt: Timestamp.fromDate(appointmentDate),
       roomId,
       status: "booked",
       doctorNotified: false,
