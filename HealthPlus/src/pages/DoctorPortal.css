@@ -52,6 +52,7 @@
 .doctor-portal__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -119,6 +120,12 @@
 
 .doctor-portal__footer-card {
   margin: 0 0 1.5rem;
+.doctor-card__icon {
+  font-size: 1.5rem;
+}
+
+.doctor-portal__footer-card {
+  margin-top: 1.5rem;
   background: #ffffff;
   border-left: 4px solid #6366f1;
   padding: 1rem 1.2rem;
