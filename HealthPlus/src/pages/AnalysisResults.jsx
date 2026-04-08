@@ -7,7 +7,7 @@ export default function AnalysisResults() {
   const navigate = useNavigate();
   const { results, analysisType, fileCount } = location.state || {};
 
-  // If no image
+  
   if (!results) {
     return (
       <div className="results-container">

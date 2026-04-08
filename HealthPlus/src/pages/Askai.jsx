@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import "./Askai.css";
 
 export default function Askai() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -27,12 +29,12 @@ export default function Askai() {
     
     fileArray.forEach((file) => {
       if (file.size > maxFileSize) {
-        setErrorMsg(`File "${file.name}" is too large. Maximum size is 10MB.`);
+        setErrorMsg(t("fileTooLarge", { name: file.name }));
         return;
       }
       
       if (!acceptedFileTypes[analysisType].includes(file.type)) {
-        setErrorMsg(`File "${file.name}" is not a supported format.`);
+        setErrorMsg(t("fileNotSupported", { name: file.name }));
         return;
       }
       
@@ -80,65 +82,60 @@ export default function Askai() {
   };
 
   const handleAnalyze = async () => {
-  if (uploadedFiles.length === 0) {
-    setErrorMsg("Please upload at least one file for analysis.");
-    return;
-  }
-  
-  setIsAnalyzing(true);
-  setErrorMsg("");
-
-  
-  const formData = new FormData();
-  formData.append('analysisType', analysisType);
-  
-  uploadedFiles.forEach((fileData) => {
-    formData.append('image', fileData.file); 
-  });
-
-  try {
-    
-    const response = await fetch(`${API_URL}/analyze-image`, {  
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.statusText}`);
+    if (uploadedFiles.length === 0) {
+      setErrorMsg(t("pleaseUploadFile"));
+      return;
     }
-
-    const resultData = await response.json();
-    
-   
-    navigate('/analysis-results', { 
-      state: { 
-        results: resultData,
-        analysisType: analysisType,
-        fileCount: uploadedFiles.length
-      } 
+  
+    setIsAnalyzing(true);
+    setErrorMsg("");
+  
+    const formData = new FormData();
+    formData.append('analysisType', analysisType);
+  
+    uploadedFiles.forEach((fileData) => {
+      formData.append('image', fileData.file); 
     });
-    
-  } catch (error) {
-    console.error('Analysis error:', error);
-    setErrorMsg(error.message || 'Analysis failed. Please check your connection and try again.');
-  } finally {
-    setIsAnalyzing(false);
-  }
-};
 
+    try {
+      const response = await fetch(`${API_URL}/analyze-image`, {  
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(t("serverError", { status: response.statusText }));
+      }
+
+      const resultData = await response.json();
+
+      navigate('/analysis-results', { 
+        state: { 
+          results: resultData,
+          analysisType: analysisType,
+          fileCount: uploadedFiles.length
+        } 
+      });
+    } catch (error) {
+      console.error('Analysis error:', error);
+      setErrorMsg(error.message || t("analysisFailed"));
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   return (
     <div className="upload-container">
       <div className="upload-card">
         {/* Header */}
         <div className="upload-header">
-          <h1>Medical Document Analysis</h1>
-          <p>Upload your prescriptions or lab reports for AI-powered analysis</p>
+          <h1>{t("medicalDocumentAnalysis")}</h1>
+          <p>{t("uploadDocsForAnalysis")}</p>
         </div>
 
         {/* Analysis Type Selection */}
         <div className="analysis-type-section">
-          <h3>Select Analysis Type</h3>
+          <h3>{t("selectAnalysisType")}</h3>
           <div className="type-options">
             <button
               className={`type-option ${analysisType === 'prescription' ? 'active' : ''}`}
@@ -146,8 +143,8 @@ export default function Askai() {
             >
               <span className="type-icon">💊</span>
               <div className="type-info">
-                <h4>Prescription Analysis</h4>
-                <p>Analyze medication details, dosages, and interactions</p>
+                <h4>{t("prescriptionAnalysis")}</h4>
+                <p>{t("prescriptionDescription")}</p>
               </div>
             </button>
             <button
@@ -156,8 +153,8 @@ export default function Askai() {
             >
               <span className="type-icon">🧪</span>
               <div className="type-info">
-                <h4>Lab Report Analysis</h4>
-                <p>Interpret test results and identify key findings</p>
+                <h4>{t("labReportAnalysis")}</h4>
+                <p>{t("labReportDescription")}</p>
               </div>
             </button>
           </div>
@@ -182,11 +179,13 @@ export default function Askai() {
           >
             <div className="drop-content">
               <div className="upload-icon">📄</div>
-              <h3>Drop files here or click to browse</h3>
+              <h3>{t("dropOrBrowse")}</h3>
               <p>
-                Supported formats: {analysisType === 'prescription' ? 'JPG, PNG, PDF' : 'PDF, JPG, PNG'}
+                {analysisType === 'prescription'
+                  ? t("supportedFormatsPrescription")
+                  : t("supportedFormatsLabReport")}
               </p>
-              <p className="size-limit">Maximum file size: 10MB per file</p>
+              <p className="size-limit">{t("maxFileSize")}</p>
             </div>
           </div>
 
@@ -203,7 +202,7 @@ export default function Askai() {
         {/* File Preview */}
         {uploadedFiles.length > 0 && (
           <div className="files-section">
-            <h3>Uploaded Files ({uploadedFiles.length})</h3>
+            <h3>{t("uploadedFiles", { count: uploadedFiles.length })}</h3>
             <div className="files-list">
               {uploadedFiles.map((fileObj) => (
                 <div key={fileObj.id} className="file-item">
@@ -224,7 +223,7 @@ export default function Askai() {
                     className="remove-btn"
                     onClick={() => removeFile(fileObj.id)}
                   >
-                    ✕
+                    {t("remove")}
                   </button>
                 </div>
               ))}
@@ -234,44 +233,44 @@ export default function Askai() {
 
         {/* Analysis Info */}
         <div className="analysis-info">
-          <h3>What Our AI Analysis Includes:</h3>
+          <h3>{t("whatAnalysisIncludes")}</h3>
           <div className="features-grid">
             {analysisType === 'prescription' ? (
               <>
                 <div className="feature-item">
                   <span className="feature-icon">💊</span>
-                  <span>Medication identification</span>
+                  <span>{t("medicationIdentification")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">⚠️</span>
-                  <span>Drug interaction warnings</span>
+                  <span>{t("drugInteractionWarnings")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">📋</span>
-                  <span>Dosage verification</span>
+                  <span>{t("dosageVerification")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">🕐</span>
-                  <span>Timing recommendations</span>
+                  <span>{t("timingRecommendations")}</span>
                 </div>
               </>
             ) : (
               <>
                 <div className="feature-item">
                   <span className="feature-icon">📊</span>
-                  <span>Test result interpretation</span>
+                  <span>{t("testResultInterpretation")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">🎯</span>
-                  <span>Abnormal value identification</span>
+                  <span>{t("abnormalValueIdentification")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">📈</span>
-                  <span>Trend analysis</span>
+                  <span>{t("trendAnalysis")}</span>
                 </div>
                 <div className="feature-item">
                   <span className="feature-icon">💡</span>
-                  <span>Health insights</span>
+                  <span>{t("healthInsights")}</span>
                 </div>
               </>
             )}
@@ -282,9 +281,9 @@ export default function Askai() {
         {isAnalyzing && (
           <div className="processing-status">
             <div className="processing-steps">
-              <div className="step active">📤 Uploading files to server...</div>
-              <div className="step active">🤖 Sending to AI analysis...</div>
-              <div className="step active">⚡ Processing results...</div>
+              <div className="step active">{t("uploadingFiles")}</div>
+              <div className="step active">{t("sendingToAI")}</div>
+              <div className="step active">{t("processingResults")}</div>
             </div>
           </div>
         )}
@@ -298,12 +297,12 @@ export default function Askai() {
           {isAnalyzing ? (
             <>
               <div className="spinner"></div>
-              Analyzing with AI...
+              {t("analyzingWithAI")}
             </>
           ) : (
             <>
               <span>🔍</span>
-              Start AI Analysis
+              {t("startAIAnalysis")}
             </>
           )}
         </button>
@@ -311,8 +310,8 @@ export default function Askai() {
         {/* Footer */}
         <div className="upload-footer">
           <div className="security-info">
-            <span className="security-badge">🔒 HIPAA Compliant</span>
-            <span className="privacy-note">Your files are encrypted and automatically deleted after analysis</span>
+            <span className="security-badge">{t("hipaaCompliant")}</span>
+            <span className="privacy-note">{t("privacyNote")}</span>
           </div>
         </div>
       </div>

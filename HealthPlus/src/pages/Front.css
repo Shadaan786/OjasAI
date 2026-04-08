@@ -416,10 +416,11 @@ body {
 
 .stat-number {
   display: block;
-  font-size: 2.5rem;
-  font-weight: 800;
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
   margin-bottom: 0.5rem;
   letter-spacing: -1px;
+  color: rgb(249, 248, 245) !important;
 }
 
 .stat-label {
@@ -1581,3 +1582,92 @@ body {
   outline-offset: 2px;
 }
 
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f4f8fb;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.language-switcher button {
+  background: none;
+  border: none;
+  color: #404970;
+  font-size: 1em;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.language-switcher button.active, .language-switcher button:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.switcher-divider {
+  color: #a0aec0;
+  font-size: 1.1em;
+}
+
+/* Vaccination Service Card Styles */
+.vaccination-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.vaccination-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.vaccination-glow {
+  background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), 
+              rgba(16, 185, 129, 0.06), 
+              transparent 40%);
+}
+
+.service-icon.vaccination {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+}
+
+.vaccination-pulse {
+  background: rgba(16, 185, 129, 0.2);
+  animation: vaccination-pulse 2s infinite;
+}
+
+@keyframes vaccination-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+.vaccination-badge {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.vaccination-card:hover .vaccination-glow {
+  opacity: 1;
+}
+
+.vaccination-card:hover .service-icon.vaccination {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4);
+}

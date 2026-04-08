@@ -15,6 +15,9 @@ import OrderMedicine from "./pages/OrderMedicine.jsx";
 import MedicalImageAnalysis from "./pages/components/MedicalAnalysis/MedicalAnalysis.jsx";
 import Results from "./pages/components/MedicalAnalysis/Results.jsx";
 import Sos from "./pages/Sos.jsx";
+import VaccinationTracker from './pages/components/VaccinationTracker/VaccinationTracker.jsx';
+// import VirtualTumorBoard from './pages/components/VirtualTumorBoard/VirtualTumorBoard.jsx';
+// import ScheduleTumorBoard from './pages/components/VirtualTumorBoard/ScheduleTumorBoard';
 
 // import ProtectedRoute from "./ProtectedRoute";
 // import Dashboard from "./Dashboard";
@@ -63,6 +66,9 @@ function App(){
       <Route path="/OrderMedicine" element={<OrderMedicine />} />
       <Route path="/getStarted/Medical" element={<MedicalImageAnalysis />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/vaccine" element={<VaccinationTracker />} />
+           {/* <Route path="/tumor-board/:caseId" element={<VirtualTumorBoard caseId="case_001" currentUser={currentUser} />} />
+        <Route path="/schedule-tumor-board" element={<ScheduleTumorBoard currentUser={currentUser} />} /> */}
     </Routes>
     </BrowserRouter>
 

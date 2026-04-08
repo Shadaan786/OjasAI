@@ -3,12 +3,15 @@ import { useNavigate } from "react-router";
 import { bookAppointment } from "../bookAppointment";
 import "./Derma.css";
 import Dermat from "../assets/Dermat.jpg";
+import { useTranslation } from "react-i18next";
 
 function Derma() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [doctorInfo] = useState({
     name: "Dr. Singhania",
     specialty: "Dermatology",
@@ -18,16 +21,15 @@ function Derma() {
   });
 
   const timeSlots = [
-    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+    "09:00","09:30","10:00","10:30","11:00","11:30",
+    "14:00","14:30","15:00","15:30","16:00","16:30"
   ];
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
-      alert("Please select both date and time");
+      alert(t("selectDateTimeAlert"));
       return;
     }
-
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
@@ -44,7 +46,7 @@ function Derma() {
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
+    return tomorrow.toISOString().split("T")[0];
   };
 
   return (
@@ -53,11 +55,11 @@ function Derma() {
         {/* Header */}
         <div className="derma-header">
           <div className="doctor-avatar">
-            <img src={Dermat} alt="Dr. Singhania" className="doctor-image" />
+            <img src={Dermat} alt={doctorInfo.name} className="doctor-image" />
           </div>
           <div className="doctor-info">
             <h1>{doctorInfo.name}</h1>
-            <p className="specialty">{doctorInfo.specialty}</p>
+            <p className="specialty">{t("specialty", { specialty: doctorInfo.specialty })}</p>
             <div className="doctor-details">
               <span className="experience">⭐ {doctorInfo.rating} • {doctorInfo.experience}</span>
               <span className="fee">💰 {doctorInfo.consultationFee}</span>
@@ -67,32 +69,28 @@ function Derma() {
 
         {/* About Section */}
         <div className="about-section">
-          <h3>About Dr. Singhania</h3>
-          <p>
-            Experienced dermatologist specializing in skin conditions, acne treatment, 
-            anti-aging procedures, and cosmetic dermatology. Board-certified with 
-            extensive experience in both medical and cosmetic dermatology.
-          </p>
-          
+          <h3>{t("aboutDoctor", { name: doctorInfo.name })}</h3>
+          <p>{t("doctorDescription")}</p>
+
           <div className="specialties">
-            <h4>Specialties:</h4>
+            <h4>{t("specialties")}</h4>
             <div className="specialty-tags">
-              <span className="tag">Acne Treatment</span>
-              <span className="tag">Skin Cancer Screening</span>
-              <span className="tag">Anti-Aging</span>
-              <span className="tag">Cosmetic Procedures</span>
-              <span className="tag">Eczema & Psoriasis</span>
+              <span className="tag">{t("acneTreatment")}</span>
+              <span className="tag">{t("skinCancer")}</span>
+              <span className="tag">{t("antiAging")}</span>
+              <span className="tag">{t("cosmeticProcedures")}</span>
+              <span className="tag">{t("eczemaPsoriasis")}</span>
             </div>
           </div>
         </div>
 
         {/* Booking Section */}
         <div className="booking-section">
-          <h3>Schedule Your Consultation</h3>
-          
+          <h3>{t("scheduleConsultation")}</h3>
+
           <div className="booking-form">
             <div className="form-group">
-              <label htmlFor="date">Select Date:</label>
+              <label htmlFor="date">{t("selectDate")}</label>
               <input
                 type="date"
                 id="date"
@@ -104,13 +102,13 @@ function Derma() {
             </div>
 
             <div className="form-group">
-              <label>Select Time:</label>
+              <label>{t("selectTime")}</label>
               <div className="time-slots">
                 {timeSlots.map((time) => (
                   <button
                     key={time}
                     type="button"
-                    className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
+                    className={`time-slot ${selectedTime === time ? "selected" : ""}`}
                     onClick={() => setSelectedTime(time)}
                   >
                     {time}
@@ -122,32 +120,32 @@ function Derma() {
             <div className="consultation-details">
               <div className="detail-item">
                 <span className="icon">⏱️</span>
-                <span>30 minute consultation</span>
+                <span>{t("consultationDuration")}</span>
               </div>
               <div className="detail-item">
                 <span className="icon">💻</span>
-                <span>Video call session</span>
+                <span>{t("videoSession")}</span>
               </div>
               <div className="detail-item">
                 <span className="icon">📋</span>
-                <span>Digital prescription included</span>
+                <span>{t("digitalPrescription")}</span>
               </div>
             </div>
 
-            <button 
-              onClick={handleBooking} 
+            <button
+              onClick={handleBooking}
               disabled={loading || !selectedDate || !selectedTime}
-              className={`book-button ${loading ? 'loading' : ''}`}
+              className={`book-button ${loading ? "loading" : ""}`}
             >
               {loading ? (
                 <>
                   <div className="spinner"></div>
-                  Booking...
+                  {t("booking")}...
                 </>
               ) : (
                 <>
                   <span>📅</span>
-                  Book Appointment - {doctorInfo.consultationFee}
+                  {t("bookAppointment")} - {doctorInfo.consultationFee}
                 </>
               )}
             </button>
@@ -156,8 +154,8 @@ function Derma() {
 
         {/* Footer */}
         <div className="derma-footer">
-          <p>🔒 Your appointment is secure and confidential</p>
-          <p>📞 24/7 support available for any questions</p>
+          <p>🔒 {t("secureAppointment")}</p>
+          <p>📞 {t("supportAvailable")}</p>
         </div>
       </div>
     </div>

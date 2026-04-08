@@ -3,28 +3,31 @@ import { useNavigate } from "react-router";
 import { bookAppointment } from "../bookAppointment";
 import "./Ortho.css";
 // import OrthoImage from "../assets/Ortho.jpg"; 
+import { useTranslation } from "react-i18next";
 
 function Ortho() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [doctorInfo] = useState({
     name: "Dr. Patel",
-    specialty: "Orthopedic Specialist",
+    specialty: t("orthoSpecialist"),
     experience: "18+ years",
     rating: 4.9,
     consultationFee: "₹50.00"
   });
 
   const timeSlots = [
-    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+    "09:00","09:30","10:00","10:30","11:00","11:30",
+    "14:00","14:30","15:00","15:30","16:00","16:30"
   ];
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
-      alert("Please select both date and time");
+      alert(t("selectDateTimeAlert"));
       return;
     }
 
@@ -44,7 +47,7 @@ function Ortho() {
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
+    return tomorrow.toISOString().split("T")[0];
   };
 
   return (
@@ -53,7 +56,7 @@ function Ortho() {
         {/* Header */}
         <div className="ortho-header">
           <div className="doctor-avatar">
-            {/* <img src={OrthoImage} alt="Dr. Patel" className="doctor-image" /> */}
+            {/* <img src={OrthoImage} alt={doctorInfo.name} className="doctor-image" /> */}
           </div>
           <div className="doctor-info">
             <h1>{doctorInfo.name}</h1>
@@ -67,33 +70,28 @@ function Ortho() {
 
         {/* About Section */}
         <div className="about-section">
-          <h3>About Dr. Patel</h3>
-          <p>
-            Renowned orthopedic specialist with expertise in bone, joint, and muscle disorders. 
-            Specialized in sports injuries, arthritis treatment, spine care, and joint replacement. 
-            Fellowship-trained with extensive experience in both surgical and non-surgical 
-            orthopedic treatments.
-          </p>
-          
+          <h3>{t("aboutDoctor", { name: doctorInfo.name })}</h3>
+          <p>{t("orthoDoctorDescription")}</p>
+
           <div className="specialties">
-            <h4>Specialties:</h4>
+            <h4>{t("specialties")}</h4>
             <div className="specialty-tags">
-              <span className="tag">Sports Injuries</span>
-              <span className="tag">Joint Replacement</span>
-              <span className="tag">Spine Care</span>
-              <span className="tag">Arthritis Treatment</span>
-              <span className="tag">Fracture Care</span>
+              <span className="tag">{t("sportsInjuries")}</span>
+              <span className="tag">{t("jointReplacement")}</span>
+              <span className="tag">{t("spineCare")}</span>
+              <span className="tag">{t("arthritisTreatment")}</span>
+              <span className="tag">{t("fractureCare")}</span>
             </div>
           </div>
         </div>
 
         {/* Booking Section */}
         <div className="booking-section">
-          <h3>Schedule Your Consultation</h3>
-          
+          <h3>{t("scheduleConsultation")}</h3>
+
           <div className="booking-form">
             <div className="form-group">
-              <label htmlFor="date">Select Date:</label>
+              <label htmlFor="date">{t("selectDate")}</label>
               <input
                 type="date"
                 id="date"
@@ -105,13 +103,13 @@ function Ortho() {
             </div>
 
             <div className="form-group">
-              <label>Select Time:</label>
+              <label>{t("selectTime")}</label>
               <div className="time-slots">
                 {timeSlots.map((time) => (
                   <button
                     key={time}
                     type="button"
-                    className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
+                    className={`time-slot ${selectedTime === time ? "selected" : ""}`}
                     onClick={() => setSelectedTime(time)}
                   >
                     {time}
@@ -123,32 +121,32 @@ function Ortho() {
             <div className="consultation-details">
               <div className="detail-item">
                 <span className="icon">⏱️</span>
-                <span>30 minute consultation</span>
+                <span>{t("consultationDuration")}</span>
               </div>
               <div className="detail-item">
                 <span className="icon">💻</span>
-                <span>Video call session</span>
+                <span>{t("videoSession")}</span>
               </div>
               <div className="detail-item">
                 <span className="icon">📋</span>
-                <span>Digital prescription included</span>
+                <span>{t("digitalPrescription")}</span>
               </div>
             </div>
 
-            <button 
-              onClick={handleBooking} 
+            <button
+              onClick={handleBooking}
               disabled={loading || !selectedDate || !selectedTime}
-              className={`book-button ${loading ? 'loading' : ''}`}
+              className={`book-button ${loading ? "loading" : ""}`}
             >
               {loading ? (
                 <>
                   <div className="spinner"></div>
-                  Booking...
+                  {t("booking")}...
                 </>
               ) : (
                 <>
                   <span>📅</span>
-                  Book Appointment - {doctorInfo.consultationFee}
+                  {t("bookAppointment")} - {doctorInfo.consultationFee}
                 </>
               )}
             </button>
@@ -157,8 +155,8 @@ function Ortho() {
 
         {/* Footer */}
         <div className="ortho-footer">
-          <p>🔒 Your appointment is secure and confidential</p>
-          <p>📞 24/7 support available for any questions</p>
+          <p>🔒 {t("secureAppointment")}</p>
+          <p>📞 {t("supportAvailable")}</p>
         </div>
       </div>
     </div>

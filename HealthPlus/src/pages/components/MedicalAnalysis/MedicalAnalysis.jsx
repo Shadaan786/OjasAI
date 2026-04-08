@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const MedicalImageAnalysis = () => {  
-  alert("For volunteers and Mentors:\nPlease do not add your personal images")
+  // alert("For volunteers and Mentors:\nPlease do not add your personal images")
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [analysis, setAnalysis] = useState(null);
@@ -76,7 +76,7 @@ const MedicalImageAnalysis = () => {
           const result = await response.json();
           console.log('MedGemma Result:', result);
           
-          // Process the medical analysis
+          // Processing
           const analysisResult = {
             condition: result.generated_text || result[0]?.generated_text || "Medical analysis completed",
             confidence: "High (Google MedGemma AI)",

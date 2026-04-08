@@ -1,9 +1,16 @@
 import { useNavigate } from "react-router";
+import { useContext } from "react";
 import { Link } from "react-router";
 import "./Front.css";
+import { useTranslation } from "react-i18next";
 
 const Front = () => {
+const { t, i18n } = useTranslation();
+
   return (
+    
+
+    
     <div className="front-container">
       
       <nav className="navbar">
@@ -49,6 +56,16 @@ const Front = () => {
               </svg>
               <div className="btn-glow"></div>
             </button>
+           <button
+  className="language-switcher"
+  onClick={() => {
+    const newLang = i18n.language === "en" ? "hi" : "en";
+    i18n.changeLanguage(newLang);
+  }}
+>
+  ह
+</button>
+
           </div>
         </div>
       </nav>
@@ -62,11 +79,10 @@ const Front = () => {
             <div className="badge-pulse"></div>
           </div>
           <h1 className="hero-title">
-            Your Health, <span className="highlight">Our Priority</span>
+            {t("greeting")} <span className="highlight">{t("greeting2")}</span>
           </h1>
           <p className="hero-subtitle">
-            Connect with certified healthcare professionals, get AI-powered insights, 
-            and manage your health journey all in one comprehensive platform.
+            {t("connect")}
           </p>
           <div className="hero-stats">
             <div className="stat">
@@ -100,12 +116,11 @@ const Front = () => {
             <div className="badge-shimmer"></div>
           </div>
           <h2 className="section-title">
-            <span className="title-line">Premium Healthcare</span>
-            <span className="title-highlight">Services & Solutions</span>
+            <span className="title-line">{t("prem")}</span>
+            <span className="title-highlight">{t("prem1")}</span>
           </h2>
           <p className="section-subtitle">
-            Advanced medical solutions designed with cutting-edge technology, 
-            personalized care approaches, and unwavering commitment to your wellness journey
+            {t("connect2")}
           </p>
           <div className="section-divider">
             <div className="divider-line"></div>
@@ -116,40 +131,44 @@ const Front = () => {
 
         <div className="services-grid">
           {/* Emergency SOS Card */}
-          <Link to = '/Sos'>
-          <div className="service-card emergency-card">
-            <div className="card-glow"></div>
-            <div className="service-header">
-              <div className="service-icon emergency">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                </svg>
-                <div className="icon-pulse"></div>
-              </div>
-              <div className="service-badge emergency-badge">
-                <span>🚨 Emergency</span>
-                <div className="badge-shine"></div>
-              </div>
-            </div>
-            <div className="service-content">
-              <h3 className="service-title">Emergency SOS Services</h3>
-              <p className="service-description">
-                <strong>Critical Situation?</strong> Get immediate emergency medical assistance. 
-                Connect with paramedics, request ambulance services, and access emergency care within minutes.
-              </p>
-              <ul className="service-features">
-                <li><span className="feature-icon">🚑</span>Instant Ambulance Dispatch</li>
-                <li><span className="feature-icon">👨‍⚕️</span>Paramedic Response Team</li>
-                <li><span className="feature-icon">📍</span>GPS Location Tracking</li>
-                <li><span className="feature-icon">⏰</span>24/7 Emergency Hotline</li>
-              </ul>
-            </div>
-            <div className="service-footer">
-              <span className="service-cta">Call Emergency Services</span>
-              <div className="cta-arrow">→</div>
-            </div>
-          </div>
-          </Link>
+         {/* <Link to="/vaccine" className="service-card vaccination-card">
+  <div className="card-glow vaccination-glow"></div>
+  <div className="service-header">
+    <div className="service-icon vaccination">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M8.5 8.5l7 7"/>
+        <path d="M15.5 8.5l-7 7"/>
+      </svg>
+      <div className="icon-pulse vaccination-pulse"></div>
+    </div>
+    <div className="service-badge vaccination-badge">
+      <span>{t("vaccineNew")}</span>
+      <div className="badge-shine"></div>
+    </div>
+  </div>
+  <div className="service-content">
+    <h3 className="service-title">{t("vaccineTitle")}</h3>
+    <p className="service-description">
+      {t("vaccineDesc")}
+    </p>
+    <ul className="service-features">
+      <li><span className="feature-icon">💉</span>{t("vaccineFeature1")}</li>
+      <li><span className="feature-icon">📅</span>{t("vaccineFeature2")}</li>
+      <li><span className="feature-icon">🔔</span>{t("vaccineFeature3")}</li>
+      <li><span className="feature-icon">📋</span>{t("vaccineFeature4")}</li>
+    </ul>
+  </div>
+  <div className="service-footer">
+    <span className="service-cta">{t("vaccineCta")}</span>
+    <div className="cta-arrow">→</div>
+  </div>
+</Link> */}
+
+          
 
           <Link to="/Consult" className="service-card featured">
             <div className="card-glow"></div>
@@ -166,19 +185,18 @@ const Front = () => {
               </div>
             </div>
             <div className="service-content">
-              <h3 className="service-title">Expert Doctor Consultation</h3>
+              <h3 className="service-title">{t("card4")}</h3>
               <p className="service-description">
-                Connect with board-certified healthcare professionals through secure video consultations. 
-                Available 24/7 with same-day appointments and comprehensive care.
+                {t("card5")}
               </p>
               <ul className="service-features">
-                <li><span className="feature-icon">✓</span>Board-certified doctors</li>
-                <li><span className="feature-icon">✓</span>Same-day appointments</li>
-                <li><span className="feature-icon">✓</span>Digital prescriptions</li>
+                <li><span className="feature-icon">✓</span>{t("card6")}</li>
+                <li><span className="feature-icon">✓</span>{t("card8")}</li>
+                <li><span className="feature-icon">✓</span>{t("card9")}</li>
               </ul>
             </div>
             <div className="service-footer">
-              <span className="service-cta">Start Consultation</span>
+              <span className="service-cta">{t("card10")}</span>
               <div className="cta-arrow">→</div>
             </div>
           </Link>
@@ -193,24 +211,22 @@ const Front = () => {
                 <div className="icon-pulse ai-pulse"></div>
               </div>
               <div className="service-badge ai-badge">
-                <span>AI Powered</span>
+                <span>{t("card12")}</span>
                 <div className="badge-shine"></div>
               </div>
             </div>
             <div className="service-content">
-              <h3 className="service-title">AI Health Assistant</h3>
-              <p className="service-description">
-                Revolutionary AI-powered health insights with preliminary assessments, 
-                symptom analysis, and personalized health recommendations.
+              <h3 className="service-title">{t("card11")}</h3>
+              <p className="service-description">{t("card13")}
               </p>
               <ul className="service-features">
-                <li><span className="feature-icon">✓</span>Instant AI responses</li>
-                <li><span className="feature-icon">✓</span>Advanced symptom analysis</li>
-                <li><span className="feature-icon">✓</span>Personalized recommendations</li>
+                <li><span className="feature-icon">✓</span>{t("card14")}</li>
+                <li><span className="feature-icon">✓</span>{t("card15")}</li>
+                <li><span className="feature-icon">✓</span>{t("card16")}</li>
               </ul>
             </div>
             <div className="service-footer">
-              <span className="service-cta">Ask AI Now</span>
+              <span className="service-cta">{t("card17")}</span>
               <div className="cta-arrow">→</div>
             </div>
           </button></Link>
@@ -227,19 +243,18 @@ const Front = () => {
               </div>
             </div>
             <div className="service-content">
-              <h3 className="service-title">Prescription Medicine Delivery</h3>
+              <h3 className="service-title">{t("card18")}</h3>
               <p className="service-description">
-                Seamless prescription upload and medicine ordering with fast delivery 
-                from our network of verified, licensed pharmacy partners.
+               {t("card18")}
               </p>
               <ul className="service-features">
-                <li><span className="feature-icon">✓</span>Smart prescription upload</li>
-                <li><span className="feature-icon">✓</span>Same-day delivery available</li>
-                <li><span className="feature-icon">✓</span>Verified pharmacy network</li>
+                <li><span className="feature-icon">✓</span>{t("card19")}</li>
+                <li><span className="feature-icon">✓</span>{t("card20")}</li>
+                <li><span className="feature-icon">✓</span>{t("card21")}</li>
               </ul>
             </div>
             <div className="service-footer">
-              <span className="service-cta">Order Medicine</span>
+              <span className="service-cta">{t("card23")}</span>
               <div className="cta-arrow">→</div>
             </div>
           </Link>
@@ -259,19 +274,18 @@ const Front = () => {
               </div>
             </div>
             <div className="service-content">
-              <h3 className="service-title">Advanced Prescription Analysis</h3>
+              <h3 className="service-title">{t("card24")}</h3>
               <p className="service-description">
-                Comprehensive prescription analysis with drug interaction detection, 
-                dosage verification, and detailed side effect information.
+                {t("card25")}
               </p>
               <ul className="service-features">
-                <li><span className="feature-icon">✓</span>Drug interaction detection</li>
-                <li><span className="feature-icon">✓</span>Dosage verification system</li>
-                <li><span className="feature-icon">✓</span>Comprehensive side effect data</li>
+                <li><span className="feature-icon">✓</span>{t("card26")}</li>
+                <li><span className="feature-icon">✓</span>{t("card27")}</li>
+                <li><span className="feature-icon">✓</span>{t("card28")}</li>
               </ul>
             </div>
             <div className="service-footer">
-              <span className="service-cta">Analyze Prescription</span>
+              <span className="service-cta">{t("card29")}</span>
               <div className="cta-arrow">→</div>
             </div>
           </Link>
@@ -288,19 +302,18 @@ const Front = () => {
               </div>
             </div>
             <div className="service-content">
-              <h3 className="service-title">Comprehensive Lab Testing</h3>
+              <h3 className="service-title">{t("card30")}</h3>
               <p className="service-description">
-                Complete laboratory testing services with home sample collection, 
-                rapid results delivery, and expert medical interpretations.
+                {t("card31")}
               </p>
               <ul className="service-features">
-                <li><span className="feature-icon">✓</span>Home sample collection</li>
-                <li><span className="feature-icon">✓</span>Rapid result delivery</li>
-                <li><span className="feature-icon">✓</span>Expert medical analysis</li>
+                <li><span className="feature-icon">✓</span>{t("card32")}</li>
+                <li><span className="feature-icon">✓</span>{t("card33")}</li>
+                <li><span className="feature-icon">✓</span>{t("card34")}</li>
               </ul>
             </div>
             <div className="service-footer">
-              <span className="service-cta">Book Lab Test</span>
+              <span className="service-cta">{t("card35")}</span>
               <div className="cta-arrow">→</div>
             </div>
           </Link>
