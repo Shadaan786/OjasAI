@@ -15,7 +15,9 @@ import OrderMedicine from "./pages/OrderMedicine.jsx";
 import MedicalImageAnalysis from "./pages/components/MedicalAnalysis/MedicalAnalysis.jsx";
 import Results from "./pages/components/MedicalAnalysis/Results.jsx";
 import Sos from "./pages/Sos.jsx";
-import VaccinationTracker from './pages/components/VaccinationTracker/VaccinationTracker.jsx';
+import VaccinationTracker from "./pages/components/VaccinationTracker/VaccinationTracker.jsx";
+import DoctorPortal from "./pages/DoctorPortal";
+
 // import VirtualTumorBoard from './pages/components/VirtualTumorBoard/VirtualTumorBoard.jsx';
 // import ScheduleTumorBoard from './pages/components/VirtualTumorBoard/ScheduleTumorBoard';
 
@@ -28,13 +30,13 @@ import VaccinationTracker from './pages/components/VaccinationTracker/Vaccinatio
 //     <Router>
 //       <Routes>
 //         <Route path="/login" element={<Login />} />
-//         <Route 
-//           path="/dashboard" 
+//         <Route
+//           path="/dashboard"
 //           element={
 //             <ProtectedRoute>
 //               <Dashboard />
 //             </ProtectedRoute>
-//           } 
+//           }
 //         />
 //       </Routes>
 //     </Router>
@@ -43,38 +45,35 @@ import VaccinationTracker from './pages/components/VaccinationTracker/Vaccinatio
 
 // export default App;
 
-
-function App(){
-
-  return(
-
+function App() {
+  return (
     <>
-    <BrowserRouter>
-    <Routes>
-      <Route path = '/' element = {<Auth/>}/>
-      <Route path = '/getStarted' element = {<Front/>}/>
-      <Route path = '/consult' element = {<Consult/>}/>
-      <Route path = '/Sos' element = {<Sos/>}/>
-      <Route path = '/derma' element = {<Derma/>}/>
-      <Route path = '/ENT' element = {<ENT/>}/>
-      <Route path = '/Ortho' element = {<Ortho/>}/>
-      <Route path = '/Dentist' element = {<Dental/>}/>
-      <Route path="/call/:room" element={<CallIframe />} />
-      <Route path="/AskAi" element={<Askai />} />
-      <Route path="/Lab" element={<Lab />} />
-      <Route path="/analysis-results" element={<AnalysisResults />} />
-      <Route path="/OrderMedicine" element={<OrderMedicine />} />
-      <Route path="/getStarted/Medical" element={<MedicalImageAnalysis />} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="/getStarted" element={<Front />} />
+          <Route path="/consult" element={<Consult />} />
+          <Route path="/Sos" element={<Sos />} />
+          <Route path="/derma" element={<Derma />} />
+          <Route path="/ENT" element={<ENT />} />
+          <Route path="/Ortho" element={<Ortho />} />
+          <Route path="/Dentist" element={<Dental />} />
+          <Route path="/call/:room" element={<CallIframe />} />
+          <Route path="/AskAi" element={<Askai />} />
+          <Route path="/Lab" element={<Lab />} />
+          <Route path="/analysis-results" element={<AnalysisResults />} />
+          <Route path="/OrderMedicine" element={<OrderMedicine />} />
+          <Route path="/getStarted/Medical" element={<MedicalImageAnalysis />} />
           <Route path="/results" element={<Results />} />
           <Route path="/vaccine" element={<VaccinationTracker />} />
-           {/* <Route path="/tumor-board/:caseId" element={<VirtualTumorBoard caseId="case_001" currentUser={currentUser} />} />
-        <Route path="/schedule-tumor-board" element={<ScheduleTumorBoard currentUser={currentUser} />} /> */}
-    </Routes>
-    </BrowserRouter>
+          <Route path="/doctor-dashboard" element={<DoctorPortal />} />
 
+          {/* <Route path="/tumor-board/:caseId" element={<VirtualTumorBoard caseId="case_001" currentUser={currentUser} />} />
+          <Route path="/schedule-tumor-board" element={<ScheduleTumorBoard currentUser={currentUser} />} /> */}
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
-
 
 export default App;

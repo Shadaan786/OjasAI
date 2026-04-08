@@ -114,7 +114,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **[Shadaan786](https://github.com/Shadaan786)** - Project Lead & Developer
 - **[Devyansh Arya](devyansh0044@gmail.com)** - Member
-- **[Vartika Patel](vartikapatel773@gmail.com)** - Member
 - **[Lalit Bhardwaj](lalitbhardwaj285@gmail.com)** - Member
 - **[Sparsh Jaiswal](www.spa6055@gmail.com)** - Member
 - **[Aviral Saraswat](abhisaraswattt@gmail.com)** - Member
