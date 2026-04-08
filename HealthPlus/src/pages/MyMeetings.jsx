@@ -6,6 +6,11 @@ import {
   onSnapshot,
   query,
   updateDoc,
+import { useNavigate } from "react-router";
+import {
+  collection,
+  onSnapshot,
+  query,
   where,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -172,6 +177,11 @@ function MyMeetings() {
             </div>
           </div>
         )}
+  return (
+    <div className="my-meetings">
+      <header className="my-meetings__header">
+        <h1>My Scheduled Meetings</h1>
+        <p>Track your booked appointments and join meetings from one place.</p>
         <button type="button" onClick={() => navigate("/consult")}>
           Book another consultation
         </button>
@@ -225,6 +235,10 @@ function MyMeetings() {
               {activeReminderAppointmentId === appointment.id && (
                 <small className="reminder-badge">🔔 Reminder active</small>
               )}
+                disabled={!appointment.roomId}
+              >
+                Join Meeting
+              </button>
             </div>
           </article>
         ))}

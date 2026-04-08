@@ -44,6 +44,11 @@ function Ortho() {
             "Appointment booked successfully. You can join from My Appointments 15 minutes before start time.",
         },
       });
+      const roomId = await bookAppointment("ortho123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
+      console.log("Appointment booked:", roomId);
+      navigate(`/call/${roomId}`);
     } catch (err) {
       alert(err.message);
     } finally {
