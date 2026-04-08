@@ -10,6 +10,7 @@ function Derma() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [notifyDoctor, setNotifyDoctor] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [doctorInfo] = useState({
@@ -33,9 +34,15 @@ function Derma() {
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
-      const roomId = await bookAppointment("derma123", appointmentDateTime);
-      console.log("Appointment booked:", roomId);
-      navigate(`/call/${roomId}`);
+      await bookAppointment("derma123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
+      navigate("/my-meetings", {
+        state: {
+          bookingSuccessMessage:
+            "Appointment booked successfully. You can join from My Appointments 15 minutes before start time.",
+        },
+      });
     } catch (err) {
       alert(err.message);
     } finally {
@@ -131,6 +138,14 @@ function Derma() {
                 <span>{t("digitalPrescription")}</span>
               </div>
             </div>
+            <label className="notify-doctor-option">
+              <input
+                type="checkbox"
+                checked={notifyDoctor}
+                onChange={(e) => setNotifyDoctor(e.target.checked)}
+              />
+              Notify {doctorInfo.name} immediately after booking
+            </label>
 
             <button
               onClick={handleBooking}

@@ -13,6 +13,12 @@ import { auth, db } from "../firebase";
 import "./DoctorPortal.css";
 
 const activeStatuses = ["booked", "waiting_for_doctor", "in_progress"];
+const doctorEmailToIdMap = {
+  "drsinghania@ojasai.com": "derma123",
+  "drsharma@ojasai.com": "ent123",
+  "drpatel@ojasai.com": "ortho123",
+  "drkumar@ojasai.com": "dental123",
+};
 
 const statusLabels = {
   booked: "Booked",
@@ -40,6 +46,11 @@ function DoctorPortal() {
       .join(" ");
   }, []);
 
+  const selectedDoctorId = useMemo(() => {
+    const email = (localStorage.getItem("ojasai_user_email") || "").toLowerCase();
+    return doctorEmailToIdMap[email] || null;
+  }, []);
+
   useEffect(() => {
     const appointmentsQuery = query(
       collection(db, "appointments"),
@@ -54,7 +65,11 @@ function DoctorPortal() {
           ...docSnap.data(),
         }));
 
-        setAppointments(records);
+        const filteredRecords = selectedDoctorId
+          ? records.filter((item) => item.doctorId === selectedDoctorId)
+          : records;
+
+        setAppointments(filteredRecords);
         setLoading(false);
       },
       (firestoreError) => {
@@ -65,10 +80,13 @@ function DoctorPortal() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [selectedDoctorId]);
 
   const waitingCount = appointments.filter(
     (item) => item.status === "waiting_for_doctor"
+  ).length;
+  const scheduledNotificationCount = appointments.filter(
+    (item) => item.status === "booked" && item.doctorNotified
   ).length;
 
   const activeAppointments = appointments.filter((item) =>
@@ -127,6 +145,9 @@ function DoctorPortal() {
         <div className="doctor-portal__actions">
           <div className="doctor-notice-badge" aria-live="polite">
             🔔 {waitingCount} waiting now
+          </div>
+          <div className="doctor-notice-badge" aria-live="polite">
+            📅 {scheduledNotificationCount} scheduled alerts
           </div>
 
           <button
