@@ -56,6 +56,9 @@ const { t, i18n } = useTranslation();
               </svg>
               <div className="btn-glow"></div>
             </button>
+            <Link to="/my-meetings" className="nav-btn secondary">
+              <span>My Meetings</span>
+            </Link>
            <button
   className="language-switcher"
   onClick={() => {

@@ -10,6 +10,7 @@ function Dental() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [notifyDoctor, setNotifyDoctor] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [doctorInfo] = useState({
@@ -34,7 +35,9 @@ function Dental() {
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
-      const roomId = await bookAppointment("dental123", appointmentDateTime);
+      const roomId = await bookAppointment("dental123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
       console.log("Appointment booked:", roomId);
       navigate(`/call/${roomId}`);
     } catch (err) {
@@ -132,6 +135,14 @@ function Dental() {
                 <span>{t("digitalPrescription")}</span>
               </div>
             </div>
+            <label className="notify-doctor-option">
+              <input
+                type="checkbox"
+                checked={notifyDoctor}
+                onChange={(e) => setNotifyDoctor(e.target.checked)}
+              />
+              Notify {doctorInfo.name} immediately after booking
+            </label>
 
             <button
               onClick={handleBooking}

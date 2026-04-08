@@ -10,6 +10,7 @@ function ENT() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [notifyDoctor, setNotifyDoctor] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [doctorInfo] = useState({
@@ -33,7 +34,9 @@ function ENT() {
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
-      const roomId = await bookAppointment("ent123", appointmentDateTime);
+      const roomId = await bookAppointment("ent123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
       console.log("Appointment booked:", roomId);
       navigate(`/call/${roomId}`);
     } catch (err) {
@@ -131,6 +134,14 @@ function ENT() {
                 <span>{t("digitalPrescription")}</span>
               </div>
             </div>
+            <label className="notify-doctor-option">
+              <input
+                type="checkbox"
+                checked={notifyDoctor}
+                onChange={(e) => setNotifyDoctor(e.target.checked)}
+              />
+              Notify {doctorInfo.name} immediately after booking
+            </label>
 
             <button
               onClick={handleBooking}
