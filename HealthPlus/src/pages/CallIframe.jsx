@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { collection, getDocs, query, updateDoc, where } from "firebase/firestore";
 import "./CallIframe.css";
 
 export default function CallIframe() {
@@ -10,18 +11,14 @@ export default function CallIframe() {
   const [isLoading, setIsLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
 
-  
-  const name =
-    user?.displayName || (user?.email ? user.email.split("@")[0] : "Guest");
+  const name = user?.displayName || (user?.email ? user.email.split("@")[0] : "Guest");
 
   const roomEncoded = encodeURIComponent(room);
   const nameEncoded = encodeURIComponent(name);
 
- 
   const src = `https://meet.jit.si/${roomEncoded}#userInfo.displayName="${nameEncoded}"&config.startWithAudioMuted=false&config.prejoinPageEnabled=false`;
 
   useEffect(() => {
-    // Simulate loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
       setIsConnected(true);
@@ -30,34 +27,55 @@ export default function CallIframe() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const notifyDoctorMeetingStarted = async () => {
+      try {
+        const q = query(collection(db, "appointments"), where("roomId", "==", room));
+        const snapshot = await getDocs(q);
+        for (const docSnap of snapshot.docs) {
+          const currentStatus = docSnap.data().status;
+          if (currentStatus === "booked") {
+            await updateDoc(docSnap.ref, {
+              status: "waiting_for_doctor",
+              doctorNotified: true,
+              meetingStartedAt: new Date(),
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to notify doctor:", error);
+      }
+    };
+
+    if (room) {
+      notifyDoctorMeetingStarted();
+    }
+  }, [room]);
+
   const handleEndCall = () => {
     if (window.confirm("Are you sure you want to end the consultation?")) {
-      navigate("/Front");
+      navigate("/getStarted");
     }
   };
 
   const handleMinimize = () => {
-   
     console.log("Minimize call window");
   };
 
   return (
     <div className="call-container">
-      {/* Header Bar */}
       <div className="call-header">
         <div className="call-info">
           <div className="status-indicator">
-            <div className={`status-dot ${isConnected ? 'connected' : 'connecting'}`}></div>
-            <span className="status-text">
-              {isConnected ? 'Connected' : 'Connecting...'}
-            </span>
+            <div className={`status-dot ${isConnected ? "connected" : "connecting"}`}></div>
+            <span className="status-text">{isConnected ? "Connected" : "Connecting..."}</span>
           </div>
           <div className="room-info">
             <span className="room-label">Room:</span>
             <span className="room-id">{room}</span>
           </div>
         </div>
-        
+
         <div className="call-controls">
           <button className="control-btn minimize-btn" onClick={handleMinimize}>
             <span>−</span>
@@ -69,7 +87,6 @@ export default function CallIframe() {
         </div>
       </div>
 
-      {/* Loading Overlay */}
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-content">
@@ -85,7 +102,6 @@ export default function CallIframe() {
         </div>
       )}
 
-      {/* Video Call Frame */}
       <div className="call-frame-container">
         <iframe
           title="Medical Consultation"
@@ -98,7 +114,6 @@ export default function CallIframe() {
         />
       </div>
 
-      {/* Footer Info */}
       <div className="call-footer">
         <div className="footer-info">
           <span className="security-badge">🔒 Encrypted & HIPAA Compliant</span>
