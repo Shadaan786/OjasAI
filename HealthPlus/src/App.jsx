@@ -15,6 +15,7 @@ import OrderMedicine from "./pages/OrderMedicine.jsx";
 import MedicalImageAnalysis from "./pages/components/MedicalAnalysis/MedicalAnalysis.jsx";
 import Results from "./pages/components/MedicalAnalysis/Results.jsx";
 import Sos from "./pages/Sos.jsx";
+import DoctorPortal from "./pages/DoctorPortal";
 
 // import ProtectedRoute from "./ProtectedRoute";
 // import Dashboard from "./Dashboard";
@@ -63,6 +64,7 @@ function App(){
       <Route path="/OrderMedicine" element={<OrderMedicine />} />
       <Route path="/getStarted/Medical" element={<MedicalImageAnalysis />} />
           <Route path="/results" element={<Results />} />
+      <Route path="/doctor-dashboard" element={<DoctorPortal />} />
     </Routes>
     </BrowserRouter>
 

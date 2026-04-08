@@ -14,6 +14,7 @@ function Auth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loginRole, setLoginRole] = useState("patient");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,13 +25,32 @@ function Auth() {
     try {
       if (isLogin) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const doctorAccounts = JSON.parse(localStorage.getItem("ojasai_doctor_accounts") || "[]");
+        const isDoctorAccount = doctorAccounts.includes(email.toLowerCase());
+
+        if (loginRole === "doctor" && !isDoctorAccount) {
+          throw { code: "auth/not-a-doctor" };
+        }
+
+        if (loginRole === "patient" && isDoctorAccount) {
+          throw { code: "auth/doctor-account" };
+        }
+
         setUser(userCredential.user);
-        setSuccess("Login successful!");
-        setTimeout(() => navigate("/getStarted"), 1500);
+        localStorage.setItem("ojasai_user_email", userCredential.user.email || "");
+        const destination = loginRole === "doctor" ? "/doctor-dashboard" : "/getStarted";
+        setSuccess(loginRole === "doctor" ? "Doctor login successful!" : "Login successful!");
+        setTimeout(() => navigate(destination), 1500);
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        if (loginRole === "doctor") {
+          const doctorAccounts = JSON.parse(localStorage.getItem("ojasai_doctor_accounts") || "[]");
+          const updatedDoctors = Array.from(new Set([...doctorAccounts, email.toLowerCase()]));
+          localStorage.setItem("ojasai_doctor_accounts", JSON.stringify(updatedDoctors));
+        }
         setUser(userCredential.user);
-        setSuccess("Account created successfully!");
+        localStorage.setItem("ojasai_user_email", userCredential.user.email || "");
+        setSuccess(loginRole === "doctor" ? "Doctor account created successfully!" : "Account created successfully!");
       }
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -43,6 +63,7 @@ function Auth() {
     try {
       await signOut(auth);
       setUser(null);
+      localStorage.removeItem("ojasai_user_email");
       setSuccess("Logged out successfully!");
     } catch (error) {
       setError(error.message);
@@ -63,6 +84,10 @@ function Auth() {
         return 'Please enter a valid email address.';
       case 'auth/too-many-requests':
         return 'Too many failed attempts. Please try again later.';
+      case 'auth/not-a-doctor':
+        return 'This account is not registered as a doctor account.';
+      case 'auth/doctor-account':
+        return 'This account is registered as a doctor. Please switch to Doctor login.';
       default:
         return 'An unexpected error occurred. Please try again.';
     }
@@ -114,8 +139,8 @@ function Auth() {
               </defs>
             </svg>
           </div>
-          <h1>{isLogin ? 'Welcome Back' : 'Create Your Account'}</h1>
-          <p>{isLogin ? 'Please sign in to your account' : 'Join us and get started today'}</p>
+          <h1>{isLogin ? `Welcome Back ${loginRole === "doctor" ? "Doctor" : ""}`.trim() : `Create ${loginRole === "doctor" ? "Doctor" : "Patient"} Account`}</h1>
+          <p>{isLogin ? `Please sign in to your ${loginRole} account` : `Join as a ${loginRole} and get started today`}</p>
         </div>
 
         {error && (
@@ -138,6 +163,26 @@ function Auth() {
             <span>{success}</span>
           </div>
         )}
+
+        <div className="form-group">
+          <label className="form-label">Sign in as</label>
+          <div className="role-toggle" role="radiogroup" aria-label="Login role">
+            <button
+              type="button"
+              className={`role-option ${loginRole === "patient" ? "active" : ""}`}
+              onClick={() => setLoginRole("patient")}
+            >
+              Patient
+            </button>
+            <button
+              type="button"
+              className={`role-option ${loginRole === "doctor" ? "active" : ""}`}
+              onClick={() => setLoginRole("doctor")}
+            >
+              Doctor
+            </button>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">

@@ -1,0 +1,131 @@
+.doctor-portal {
+  min-height: 100vh;
+  padding: 2.5rem;
+  background: linear-gradient(145deg, #f8fbff 0%, #edf2ff 100%);
+  color: #1f2a44;
+}
+
+.doctor-portal__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.doctor-portal__header h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+}
+
+.doctor-portal__eyebrow {
+  margin: 0;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.doctor-portal__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.doctor-notice-badge {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+}
+
+.doctor-portal__logout {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.doctor-portal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.doctor-card {
+  background: #ffffff;
+  padding: 1.2rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.doctor-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.doctor-card h2 {
+  margin: 0.4rem 0;
+  font-size: 1.15rem;
+}
+
+.status-chip {
+  font-size: 0.72rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.status-booked {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.status-waiting_for_doctor {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-in_progress {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.doctor-card__actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.7rem;
+}
+
+.doctor-card__actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  background: #6366f1;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.doctor-card__actions .secondary {
+  background: #e2e8f0;
+  color: #1f2937;
+}
+
+.doctor-portal__footer-card {
+  margin: 0 0 1.5rem;
+  background: #ffffff;
+  border-left: 4px solid #6366f1;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+}
+
+.doctor-error {
+  color: #b91c1c;
+  font-weight: 600;
+}
