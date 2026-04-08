@@ -1,0 +1,87 @@
+.my-meetings {
+  min-height: 100vh;
+  background: #f8f9ff;
+  padding: 2rem;
+}
+
+.my-meetings__header {
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(14, 30, 37, 0.08);
+}
+
+.my-meetings__header button {
+  margin-top: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  background: #4f46e5;
+  color: #fff;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+}
+
+.my-meetings__state {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.my-meetings__state.error {
+  color: #b91c1c;
+}
+
+.my-meetings__grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.my-meetings__card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.my-meetings__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.chip-booked {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.chip-waiting_for_doctor {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.chip-in_progress {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.my-meetings__actions button {
+  margin-top: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}

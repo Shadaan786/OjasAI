@@ -13,7 +13,7 @@ const doctorDirectory = {
   dental123: { name: "Dr. Gupta", specialty: "Dental" },
 };
 
-export async function bookAppointment(doctorId, time) {
+export async function bookAppointment(doctorId, time, options = {}) {
   const user = auth.currentUser;
 
   if (!user) {
@@ -61,6 +61,8 @@ export async function bookAppointment(doctorId, time) {
   }
 
   try {
+    const notifyDoctorOnBooking = Boolean(options.notifyDoctorOnBooking);
+
     await addDoc(collection(db, "appointments"), {
       patientId: user.uid,
       patientEmail: user.email || "",
@@ -72,7 +74,10 @@ export async function bookAppointment(doctorId, time) {
       appointmentAt: Timestamp.fromDate(appointmentDate),
       roomId,
       status: "booked",
-      doctorNotified: false,
+      doctorNotified: notifyDoctorOnBooking,
+      doctorNotificationRequestedAt: notifyDoctorOnBooking
+        ? serverTimestamp()
+        : null,
       createdAt: serverTimestamp(),
     });
   } catch (error) {
