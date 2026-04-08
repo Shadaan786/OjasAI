@@ -32,6 +32,41 @@
 .my-meetings__state.error {
   color: #b91c1c;
 }
+.my-meetings__state.success {
+  color: #166534;
+  font-weight: 600;
+  padding: 0;
+}
+
+.my-meetings__bell-alert {
+  margin: 0.8rem 0;
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+  background: #fffbeb;
+  color: #78350f;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.bell-icon {
+  font-size: 1.2rem;
+  animation: bellRing 0.8s ease-in-out infinite;
+}
+
+@keyframes bellRing {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
+}
 
 .my-meetings__grid {
   max-width: 900px;
@@ -84,4 +119,15 @@
   color: #fff;
   padding: 0.55rem 0.9rem;
   cursor: pointer;
+}
+
+.my-meetings__actions small {
+  display: block;
+  margin-top: 0.45rem;
+  color: #475569;
+}
+
+.reminder-badge {
+  color: #92400e !important;
+  font-weight: 600;
 }

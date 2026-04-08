@@ -1,4 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  updateDoc,
 import { useNavigate } from "react-router";
 import {
   collection,
@@ -18,10 +25,14 @@ const statusLabels = {
 
 function MyMeetings() {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = auth.currentUser;
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reminderMessage, setReminderMessage] = useState("");
+  const [activeReminderAppointmentId, setActiveReminderAppointmentId] = useState("");
+  const [notifiedInSession, setNotifiedInSession] = useState({});
 
   useEffect(() => {
     if (!user) {
@@ -66,6 +77,106 @@ function MyMeetings() {
     [appointments]
   );
 
+  const ringBell = () => {
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const ctx = new AudioContextClass();
+      const now = ctx.currentTime;
+      const bell = (start) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(880, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.34);
+      };
+
+      bell(now);
+      bell(now + 0.4);
+      setTimeout(() => {
+        ctx.close();
+      }, 1200);
+    } catch (audioError) {
+      console.error("Unable to ring reminder bell:", audioError);
+    }
+  };
+
+  useEffect(() => {
+    if (!appointments.length) return;
+
+    const interval = setInterval(async () => {
+      const nowMs = Date.now();
+      const reminders = appointments.filter((item) => {
+        if (item.status === "completed") return false;
+        const appointmentMs = new Date(item.appointmentDate || item.time || "").getTime();
+        if (Number.isNaN(appointmentMs)) return false;
+        const diffMs = appointmentMs - nowMs;
+        const isWithinReminderWindow = diffMs <= 15 * 60 * 1000 && diffMs > 0;
+        const alreadyReminded =
+          item.patientReminderSentAt ||
+          item.doctorReminderSentAt ||
+          notifiedInSession[item.id];
+
+        return isWithinReminderWindow && !alreadyReminded;
+      });
+
+      for (const appointment of reminders) {
+        setReminderMessage(
+          `Reminder: Your meeting with ${appointment.doctorName || "doctor"} starts in about 15 minutes.`
+        );
+        setActiveReminderAppointmentId(appointment.id);
+        ringBell();
+        setNotifiedInSession((prev) => ({ ...prev, [appointment.id]: true }));
+
+        try {
+          await updateDoc(doc(db, "appointments", appointment.id), {
+            patientReminderSentAt: new Date(),
+            doctorReminderSentAt: new Date(),
+            doctorNotified: true,
+          });
+        } catch (reminderError) {
+          console.error("Failed to store appointment reminder state:", reminderError);
+        }
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [appointments, notifiedInSession]);
+
+  const canJoinMeeting = (appointment) => {
+    const appointmentMs = new Date(appointment.appointmentDate || appointment.time || "").getTime();
+    if (Number.isNaN(appointmentMs) || appointment.status === "completed") return false;
+    return appointmentMs - Date.now() <= 15 * 60 * 1000;
+  };
+
+  return (
+    <div className="my-meetings">
+      <header className="my-meetings__header">
+        <h1>My Appointments</h1>
+        <p>Track your booked appointments and join meetings from one place.</p>
+        {location.state?.bookingSuccessMessage && (
+          <p className="my-meetings__state success">
+            {location.state.bookingSuccessMessage}
+          </p>
+        )}
+        {reminderMessage && (
+          <div className="my-meetings__bell-alert" role="alert">
+            <span className="bell-icon">🔔</span>
+            <div>
+              <p>{reminderMessage}</p>
+              <small>
+                Join button is now enabled for your upcoming appointment.
+              </small>
+            </div>
+          </div>
+        )}
   return (
     <div className="my-meetings">
       <header className="my-meetings__header">
@@ -112,6 +223,18 @@ function MyMeetings() {
               <button
                 type="button"
                 onClick={() => navigate(`/call/${appointment.roomId}`)}
+                disabled={!appointment.roomId || !canJoinMeeting(appointment)}
+              >
+                Join Meeting
+              </button>
+              {!canJoinMeeting(appointment) && (
+                <small>
+                  Join is enabled in the last 15 minutes before the appointment.
+                </small>
+              )}
+              {activeReminderAppointmentId === appointment.id && (
+                <small className="reminder-badge">🔔 Reminder active</small>
+              )}
                 disabled={!appointment.roomId}
               >
                 Join Meeting

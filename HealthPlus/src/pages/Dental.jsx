@@ -35,6 +35,15 @@ function Dental() {
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
+      await bookAppointment("dental123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
+      navigate("/my-meetings", {
+        state: {
+          bookingSuccessMessage:
+            "Appointment booked successfully. You can join from My Appointments 15 minutes before start time.",
+        },
+      });
       const roomId = await bookAppointment("dental123", appointmentDateTime, {
         notifyDoctorOnBooking: notifyDoctor,
       });

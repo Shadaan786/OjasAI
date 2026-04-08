@@ -34,6 +34,15 @@ function Derma() {
     setLoading(true);
     try {
       const appointmentDateTime = `${selectedDate} ${selectedTime}`;
+      await bookAppointment("derma123", appointmentDateTime, {
+        notifyDoctorOnBooking: notifyDoctor,
+      });
+      navigate("/my-meetings", {
+        state: {
+          bookingSuccessMessage:
+            "Appointment booked successfully. You can join from My Appointments 15 minutes before start time.",
+        },
+      });
       const roomId = await bookAppointment("derma123", appointmentDateTime, {
         notifyDoctorOnBooking: notifyDoctor,
       });
