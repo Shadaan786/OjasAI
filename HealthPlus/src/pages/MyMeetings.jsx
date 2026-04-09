@@ -6,11 +6,6 @@ import {
   onSnapshot,
   query,
   updateDoc,
-import { useNavigate } from "react-router";
-import {
-  collection,
-  onSnapshot,
-  query,
   where,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -27,6 +22,7 @@ function MyMeetings() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = auth.currentUser;
+
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -63,7 +59,8 @@ function MyMeetings() {
         setAppointments(records);
         setLoading(false);
       },
-      () => {
+      (fetchError) => {
+        console.error("Unable to fetch meetings:", fetchError);
         setError("Unable to fetch your meetings right now.");
         setLoading(false);
       }
@@ -84,22 +81,28 @@ function MyMeetings() {
 
       const ctx = new AudioContextClass();
       const now = ctx.currentTime;
+
       const bell = (start) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
+
         osc.type = "triangle";
         osc.frequency.setValueAtTime(880, start);
+
         gain.gain.setValueAtTime(0.0001, start);
         gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+
         osc.connect(gain);
         gain.connect(ctx.destination);
+
         osc.start(start);
         osc.stop(start + 0.34);
       };
 
       bell(now);
       bell(now + 0.4);
+
       setTimeout(() => {
         ctx.close();
       }, 1200);
@@ -113,12 +116,19 @@ function MyMeetings() {
 
     const interval = setInterval(async () => {
       const nowMs = Date.now();
+
       const reminders = appointments.filter((item) => {
         if (item.status === "completed") return false;
-        const appointmentMs = new Date(item.appointmentDate || item.time || "").getTime();
+
+        const appointmentMs = new Date(
+          item.appointmentDate || item.time || ""
+        ).getTime();
+
         if (Number.isNaN(appointmentMs)) return false;
+
         const diffMs = appointmentMs - nowMs;
         const isWithinReminderWindow = diffMs <= 15 * 60 * 1000 && diffMs > 0;
+
         const alreadyReminded =
           item.patientReminderSentAt ||
           item.doctorReminderSentAt ||
@@ -151,37 +161,39 @@ function MyMeetings() {
   }, [appointments, notifiedInSession]);
 
   const canJoinMeeting = (appointment) => {
-    const appointmentMs = new Date(appointment.appointmentDate || appointment.time || "").getTime();
-    if (Number.isNaN(appointmentMs) || appointment.status === "completed") return false;
+    const appointmentMs = new Date(
+      appointment.appointmentDate || appointment.time || ""
+    ).getTime();
+
+    if (Number.isNaN(appointmentMs) || appointment.status === "completed") {
+      return false;
+    }
+
     return appointmentMs - Date.now() <= 15 * 60 * 1000;
   };
 
   return (
     <div className="my-meetings">
       <header className="my-meetings__header">
-        <h1>My Appointments</h1>
+        <h1>My Scheduled Meetings</h1>
         <p>Track your booked appointments and join meetings from one place.</p>
+
         {location.state?.bookingSuccessMessage && (
           <p className="my-meetings__state success">
             {location.state.bookingSuccessMessage}
           </p>
         )}
+
         {reminderMessage && (
           <div className="my-meetings__bell-alert" role="alert">
             <span className="bell-icon">🔔</span>
             <div>
               <p>{reminderMessage}</p>
-              <small>
-                Join button is now enabled for your upcoming appointment.
-              </small>
+              <small>Join button is now enabled for your upcoming appointment.</small>
             </div>
           </div>
         )}
-  return (
-    <div className="my-meetings">
-      <header className="my-meetings__header">
-        <h1>My Scheduled Meetings</h1>
-        <p>Track your booked appointments and join meetings from one place.</p>
+
         <button type="button" onClick={() => navigate("/consult")}>
           Book another consultation
         </button>
@@ -208,13 +220,14 @@ function MyMeetings() {
             </div>
 
             <p>
-              <strong>Specialty:</strong>{" "}
-              {appointment.doctorSpecialty || "General"}
+              <strong>Specialty:</strong> {appointment.doctorSpecialty || "General"}
             </p>
+
             <p>
               <strong>Schedule:</strong>{" "}
               {appointment.time || appointment.appointmentDate || "N/A"}
             </p>
+
             <p>
               <strong>Room ID:</strong> {appointment.roomId || "N/A"}
             </p>
@@ -227,18 +240,16 @@ function MyMeetings() {
               >
                 Join Meeting
               </button>
+
               {!canJoinMeeting(appointment) && (
                 <small>
                   Join is enabled in the last 15 minutes before the appointment.
                 </small>
               )}
+
               {activeReminderAppointmentId === appointment.id && (
                 <small className="reminder-badge">🔔 Reminder active</small>
               )}
-                disabled={!appointment.roomId}
-              >
-                Join Meeting
-              </button>
             </div>
           </article>
         ))}
